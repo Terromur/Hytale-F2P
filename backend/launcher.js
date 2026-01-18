@@ -7,6 +7,7 @@ const axios = require('axios');
 const AdmZip = require('adm-zip');
 const { v4: uuidv4 } = require('uuid');
 const crypto = require('crypto');
+const logger = require('./logger');
 
 const execAsync = promisify(exec);
 const execFileAsync = promisify(execFile);
@@ -55,7 +56,13 @@ function setupWaylandEnvironment() {
   
   const envVars = {
     SDL_VIDEODRIVER: 'wayland',
+    GDK_BACKEND: 'wayland',
+    QT_QPA_PLATFORM: 'wayland',
+    MOZ_ENABLE_WAYLAND: '1',
+    _JAVA_AWT_WM_NONREPARENTING: '1'
   };
+  
+  envVars.ELECTRON_OZONE_PLATFORM_HINT = 'wayland';
   
   console.log('Wayland environment variables:', envVars);
   return envVars;
@@ -2212,5 +2219,6 @@ module.exports = {
   markAsLaunched,
   checkExistingGameInstallation,
   proposeGameUpdate,
-  handleFirstLaunchCheck
+  handleFirstLaunchCheck,
+  getResolvedAppDir
 };
