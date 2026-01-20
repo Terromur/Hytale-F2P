@@ -7,9 +7,8 @@ const {
   getModsPath 
 } = require('../core/config');
 
-// We'll lazy-load modManager to avoid circular dependencies if possible, 
-// or carefully structure our imports. 
-// For now, we might need to access mod paths directly or use helper functions.
+// Lazy-load modManager to avoid circular deps, or keep imports structured.
+// For now, access mod paths directly or use helper helpers.
 
 class ProfileManager {
   constructor() {
@@ -57,10 +56,9 @@ class ProfileManager {
         [defaultProfileId]: defaultProfile
       },
       activeProfileId: defaultProfileId,
-      // We keep a global registry of "known" mods if we want, 
-      // but for now the current implementation implies 
-      // mods are just files in folders.
-      // We'll use the profile "mods" array to track ENABLED/KNOWN mods for that profile.
+      // Mods are currently treated as files on disk.
+      // The profile's `mods` array is the source of truth for enabled/known mods per profile.
+
     };
 
     saveConfig(updates);
@@ -196,10 +194,9 @@ class ProfileManager {
     // If we updated mods for the *active* profile, we might need to sync immediately
     if (config.activeProfileId === id && updates.mods) {
          // Optionally trigger sync? 
-         // Usually updates come from "Enabling/Disabling" a single mod, 
-         // which might call a more specific method. 
-         // But if we bulk update, we should sync.
-         // Let's leave sync invoke to the caller or specific methods for now.
+         // Sync is usually triggered when toggling a single mod.
+        // For bulk updates, the caller should decide when to sync.
+
     }
 
     return profiles[id];
