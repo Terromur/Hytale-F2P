@@ -18,16 +18,19 @@ jobs:
           node-version: '22'
           cache: 'npm'
       - run: npm ci
-      - run: npx electron-builder --linux --publish never
+      
+      - name: Build Linux Packages
+        run: |
+          npx electron-builder --linux --x64 --arm64 --publish never
       - uses: actions/upload-artifact@v4
         with:
           name: linux-builds
           path: |
             dist/*.AppImage
             dist/*.deb
-            dist/*.snap
             dist/*.rpm
             dist/*.pacman
+            dist/latest.yml
 
   build-windows:
     runs-on: windows-latest
@@ -44,6 +47,7 @@ jobs:
           name: windows-builds
           path: |
             dist/*.exe
+            dist/latest.yml
 
   build-macos:
     runs-on: macos-latest
